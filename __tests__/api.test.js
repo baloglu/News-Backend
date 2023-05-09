@@ -18,9 +18,8 @@ describe("API endpoints", () => {
         .expect(200)
             .then((result) => {
                 const topics = result.body.topics;
-                expect(topics).toHaveLength(3)
-                expect(topics[0]).toHaveProperty('description')
-                expect(topics[0]).toHaveProperty('slug')
+                const expected = [{"description": "The man, the Mitch, the legend", "slug": "mitch"}, {"description": "Not dogs", "slug": "cats"}, {"description": "what books are made of", "slug": "paper"}]
+                expect(topics).toEqual(expected)
         });
     })
 })
