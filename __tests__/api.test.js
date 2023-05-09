@@ -17,7 +17,7 @@ describe("API endpoints", () => {
         .get("/api/topics")
         .expect(200)
             .then((result) => {
-                const topics = result.body;
+                const topics = result.body.topics;
                 expect(topics).toHaveLength(3)
                 expect(topics[0]).toHaveProperty('description')
                 expect(topics[0]).toHaveProperty('slug')

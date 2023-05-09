@@ -6,7 +6,8 @@ app.get("/api/topics", getTopics)
 
 app.use((error, request, response, next) => {
     // General error, will be updated as needed
-    return response.status(400).send(error)
+    // As this error will likely be coming from database, 500 looks like a better error
+    return response.status(500).send(error)
 })
 
 module.exports = app
