@@ -1,14 +1,17 @@
 const express = require("express")
 const getTopics = require("./controllers/get-topics.controller")
 const getEndpoints = require("./controllers/get-endpoints.controller")
+const getArticlesId = require("./controllers/get-articles.controller")
 const app = express()
 
 app.get("/api", getEndpoints)
 app.get("/api/topics", getTopics)
-
+app.get("/api/articles/:article_id", getArticlesId)
 app.use((error, request, response, next) => {
     // General error, will be updated as needed
-    // As this error will likely be coming from database, 500 looks like a better error
+    if (error.status && error.msg) {
+        return response.status(error.status).send(error)
+    }
     return response.status(500).send(error)
 })
 
