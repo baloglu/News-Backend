@@ -12,6 +12,17 @@ afterAll(() => {
     return db.end()
 })
 describe("API endpoints", () => {
+    test("/api endpoint should return a JSON object describing the API", () => {
+        return request(app)
+        .get("/api")
+        .expect(200)
+            .then((result) => {
+                const topics = result.body.endpoints;
+                const expected = "GET /api"
+                expect(topics).toHaveProperty(expected)
+                expect(topics).toHaveProperty("GET /api/topics")
+        });
+    })
     test("/api/topics endpoint should fetch an array of 3 objects with slug and description properties", () => {
         return request(app)
         .get("/api/topics")
