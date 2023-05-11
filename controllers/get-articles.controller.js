@@ -2,9 +2,6 @@ const { getArticlesModel, getArticleIdModel } = require('../models/get-articles.
 
 function getArticleId(request, response, next) {
     const { article_id } = request.params
-    // if (isNaN(Number(article_id))) {
-    //     next({ status: 422, msg: 'Article ID must be a number' })
-    // }
     getArticleIdModel(article_id)
         .then(result => {
         return response.status(200).send({ article: result.rows[0] } );
@@ -18,7 +15,7 @@ function getArticleId(request, response, next) {
 function getArticles(request, response, next) {
     getArticlesModel()
     .then(result => {
-        return response.status(200).send({ articles: result.rows } );
+        response.status(200).send({ articles: result.rows } );
         })
         .catch(err => {
             next(err)
