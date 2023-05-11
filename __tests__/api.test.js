@@ -43,10 +43,10 @@ describe("API endpoints", () => {
                 expect(article).toEqual(expected)
         });
     })
-    test("/api/articles/100 should return an error with status 404", () => {
+    test("/api/articles/100 should return an error with status 400", () => {
         return request(app)
         .get("/api/articles/100")
-        .expect(404)
+        .expect(400)
             .then((result) => {
                 const article = JSON.parse(result.error.text).msg;
                 const expected = "Article doesn't exist"
@@ -56,10 +56,10 @@ describe("API endpoints", () => {
     test("/api/articles/hello endpoint should return an error with status 422", () => {
         return request(app)
         .get("/api/articles/hello")
-        .expect(422)
+        .expect(400)
             .then((result) => {
                 const article = JSON.parse(result.error.text).msg;
-                const expected = 'Article ID must be a number'
+                const expected = 'Invalid input syntax'
                 expect(article).toEqual(expected)
         });
     })

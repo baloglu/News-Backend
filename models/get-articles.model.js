@@ -6,9 +6,12 @@ function getArticleIdModel(article_id) {
     votes, article_img_url FROM articles WHERE article_id=$1;`, [article_id])
         .then(result => {
             if (result.rows.length === 0) {
-                return Promise.reject("Article doesn't exist")
+                return Promise.reject({ status: 400, msg: "Article doesn't exist" })
             }
             return result;
+        })
+        .catch(err => {
+            return Promise.reject(err)
         });
 }
 
