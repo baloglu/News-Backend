@@ -15,5 +15,22 @@
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an article object",
+    "queries": [],
+    "exampleResponse": {
+      "article": 
+        {
+          "author": "Chetin Baloglu",
+          "title": "Fried potato",
+          "article_id": 1,
+          "body": "Text from the article..",
+          "topic": "cooking",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "votes": 0,
+          "article_img_url": "www.example.com/images/1"
+        }
+    }
   }
 }

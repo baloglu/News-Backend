@@ -33,4 +33,34 @@ describe("API endpoints", () => {
                 expect(topics).toEqual(expected)
         });
     })
+    test("/api/articles/:article_id endpoint should return an article object", () => {
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+            .then((result) => {
+                const article = result.body.article;
+                const expected = {"article_id": 1, "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700", "author": "butter_bridge", "body": "I find this existence challenging", "created_at": "2020-07-09T20:11:00.000Z", "title": "Living in the shadow of a great man", "topic": "mitch", "votes": 100}
+                expect(article).toEqual(expected)
+        });
+    })
+    test("/api/articles/100 should return an error with status 400", () => {
+        return request(app)
+        .get("/api/articles/100")
+        .expect(400)
+            .then((result) => {
+                const article = JSON.parse(result.error.text).msg;
+                const expected = "Article doesn't exist"
+                expect(article).toEqual(expected)
+        });
+    })
+    test("/api/articles/hello endpoint should return an error with status 422", () => {
+        return request(app)
+        .get("/api/articles/hello")
+        .expect(400)
+            .then((result) => {
+                const article = JSON.parse(result.error.text).msg;
+                const expected = 'Invalid input syntax'
+                expect(article).toEqual(expected)
+        });
+    })
 })
