@@ -25,7 +25,7 @@ function getArticles(request, response, next) {
 function getArticleComments(request, response, next) {
     const { article_id } = request.params
 
-    getArticlesModel(article_id)
+    getArticleCommentsModel(article_id)
     .then(result => {
         response.status(200).send({ comments: result.rows } );
         })

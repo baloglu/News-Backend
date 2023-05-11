@@ -91,14 +91,30 @@ describe("API endpoints", () => {
                 expect(articles).toBeSortedBy(expected, {descending: true})
         });
     })
+    test("/api/articles/:article_id/comments endpoint should return all article comments in an array", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+            .then((result) => {
+                const comments = result.body.comments;
+                const expected = 11
+                expect(comments.length).toBe(expected)
+                expect(comments[0]).toHaveProperty('comment_id')
+                expect(comments[0]).toHaveProperty('votes')
+                expect(comments[0]).toHaveProperty('created_at')
+                expect(comments[0]).toHaveProperty('author')
+                expect(comments[0]).toHaveProperty('body')
+                expect(comments[0]).toHaveProperty('article_id')
+        });
+    })
     test("/api/articles/:article_id/comments should return array of comments in date descending order", () => {
         return request(app)
         .get("/api/articles/1/comments")
         .expect(200)
             .then((result) => {
-                const articles = result.body.comments;
+                const comments = result.body.comments;
                 const expected = 'created_at'
-                expect(articles).toBeSortedBy(expected, {descending: true})
+                expect(comments).toBeSortedBy(expected, {descending: true})
         });
     })
 })
