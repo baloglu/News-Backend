@@ -63,4 +63,32 @@ describe("API endpoints", () => {
                 expect(article).toEqual(expected)
         });
     })
+    test("/api/articles endpoint should return all articles in an array", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+            .then((result) => {
+                const articles = result.body.articles;
+                const expected = 12
+                expect(articles.length).toBe(expected)
+                expect(articles[0]).toHaveProperty('article_id')
+                expect(articles[0]).toHaveProperty('author')
+                expect(articles[0]).toHaveProperty('title')
+                expect(articles[0]).toHaveProperty('topic')
+                expect(articles[0]).toHaveProperty('created_at')
+                expect(articles[0]).toHaveProperty('votes')
+                expect(articles[0]).toHaveProperty('article_img_url')
+                expect(articles[0]).toHaveProperty('comment_count')
+        });
+    })
+    test("/api/articles should return array of articles in date descending order", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+            .then((result) => {
+                const articles = result.body.articles;
+                const expected = 'created_at'
+                expect(articles).toBeSortedBy(expected, {descending: true})
+        });
+    })
 })
