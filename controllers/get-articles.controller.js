@@ -1,4 +1,4 @@
-const { getArticlesModel, getArticleIdModel } = require('../models/get-articles.model')
+const { getArticlesModel, getArticleIdModel, getArticleCommentsModel } = require('../models/get-articles.model')
 
 function getArticleId(request, response, next) {
     const { article_id } = request.params
@@ -21,4 +21,16 @@ function getArticles(request, response, next) {
             next(err)
     })
 }
-module.exports = { getArticles, getArticleId }
+
+function getArticleComments(request, response, next) {
+    const { article_id } = request.params
+
+    getArticlesModel(article_id)
+    .then(result => {
+        response.status(200).send({ comments: result.rows } );
+        })
+        .catch(err => {
+            next(err)
+    })
+}
+module.exports = { getArticles, getArticleId, getArticleComments }

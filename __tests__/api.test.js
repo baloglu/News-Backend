@@ -91,4 +91,14 @@ describe("API endpoints", () => {
                 expect(articles).toBeSortedBy(expected, {descending: true})
         });
     })
+    test("/api/articles/:article_id/comments should return array of comments in date descending order", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+            .then((result) => {
+                const articles = result.body.comments;
+                const expected = 'created_at'
+                expect(articles).toBeSortedBy(expected, {descending: true})
+        });
+    })
 })

@@ -1,13 +1,14 @@
 const express = require("express")
 const getTopics = require("./controllers/get-topics.controller")
 const getEndpoints = require("./controllers/get-endpoints.controller")
-const { getArticles, getArticleId } = require("./controllers/get-articles.controller")
+const { getArticles, getArticleId, getArticleComments } = require("./controllers/get-articles.controller")
 const app = express()
 
 app.get("/api", getEndpoints)
 app.get("/api/topics", getTopics)
 app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id", getArticleId)
+app.get("/api/articles/:article_id/comments", getArticleComments)
 app.use((error, request, response, next) => {
     // General error, will be updated as needed
     if (error.code === '22P02') {
