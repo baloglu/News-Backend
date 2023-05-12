@@ -91,4 +91,66 @@ describe("API endpoints", () => {
                 expect(articles).toBeSortedBy(expected, {descending: true})
         });
     })
+    test("/api/articles/:article_id/comments endpoint should return all article comments in an array", () => {
+        return request(app)
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then((result) => {
+                const comments = result.body.comments;
+                const expected = 11
+                expect(comments.length).toBe(expected)
+                expect(comments).toEqual(expect.arrayContaining([
+                    {
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        article_id: 1,
+                    }
+                ]))
+                
+
+        });
+    })
+    test("/api/articles/:article_id/comments should return array of comments in date descending order", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+            .then((result) => {
+                const comments = result.body.comments;
+                const expected = 'created_at'
+                expect(comments).toBeSortedBy(expected, {descending: true})
+        });
+    })
+    test("When article id doesn't exist for comments it should return an error", () => {
+        return request(app)
+        .get("/api/articles/100/comments")
+        .expect(404)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = "This article doesn't exist!"
+                expect(message).toEqual(expected)
+        });
+    })
+    test("When article doesn't have any comments it should return an error", () => {
+        return request(app)
+        .get("/api/articles/2/comments")
+        .expect(404)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = 'There are no comments for this article'
+                expect(message).toEqual(expected)
+        });
+    })
+    test("When article id for comments is not a number it should return syntax error", () => {
+        return request(app)
+        .get("/api/articles/hundred/comments")
+        .expect(400)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = 'Invalid input syntax'
+                expect(message).toEqual(expected)
+        });
+    })
 })
