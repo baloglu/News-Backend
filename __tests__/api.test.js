@@ -117,13 +117,23 @@ describe("API endpoints", () => {
                 expect(comments).toBeSortedBy(expected, {descending: true})
         });
     })
-    test("When article id doesn't exist it should return an error", () => {
+    test("When article id doesn't exist for comments it should return an error", () => {
         return request(app)
         .get("/api/articles/100/comments")
         .expect(400)
             .then((result) => {
                 const message = JSON.parse(result.error.text).msg;
                 const expected = 'There are no comments for this article'
+                expect(message).toEqual(expected)
+        });
+    })
+    test("When article id for comments is not a number it should return syntax error", () => {
+        return request(app)
+        .get("/api/articles/hundred/comments")
+        .expect(400)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = 'Invalid input syntax'
                 expect(message).toEqual(expected)
         });
     })
