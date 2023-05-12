@@ -17,7 +17,6 @@ app.use((error, request, response, next) => {
     if (error.status && error.msg) {
         return response.status(error.status).send(error)
     }
-    console.log(error)
     return response.status(500).send(error)
 })
 

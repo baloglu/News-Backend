@@ -30,14 +30,24 @@ function getArticlesModel() {
 
 function getArticleCommentsModel(article_id) {
 
-    return db.query(`SELECT comment_id, votes, created_at, author, body, article_id 
-    FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`, [article_id])
-        .then(result => {
-            if (result.rows.length === 0) {
-                return Promise.reject({ status: 400, msg: "There are no comments for this article" })
+    return db.query(`SELECT article_id FROM articles WHERE article_id = $1;`, [article_id])
+        .then((result) => {
+
+            if (result.rows.length === 0) return Promise.reject({ status: 404, msg: "This article doesn't exist!" })
+            else {
+                return db.query(`SELECT comment_id, votes, created_at, author, body, article_id 
+                FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`, [article_id])
+                    .then(result => {
+                        if (result.rows.length === 0) {
+                            return Promise.reject({ status: 404, msg: "There are no comments for this article" })
+                        }
+                        return result;
+                    })
             }
-            return result;
         })
+        .catch(err => {
+            return Promise.reject(err)
+    })
 }
 
 module.exports = { getArticlesModel, getArticleIdModel, getArticleCommentsModel }

@@ -93,18 +93,24 @@ describe("API endpoints", () => {
     })
     test("/api/articles/:article_id/comments endpoint should return all article comments in an array", () => {
         return request(app)
-        .get("/api/articles/1/comments")
-        .expect(200)
+            .get("/api/articles/1/comments")
+            .expect(200)
             .then((result) => {
                 const comments = result.body.comments;
                 const expected = 11
                 expect(comments.length).toBe(expected)
-                expect(comments[0]).toHaveProperty('comment_id')
-                expect(comments[0]).toHaveProperty('votes')
-                expect(comments[0]).toHaveProperty('created_at')
-                expect(comments[0]).toHaveProperty('author')
-                expect(comments[0]).toHaveProperty('body')
-                expect(comments[0]).toHaveProperty('article_id')
+                expect(comments).toEqual(expect.arrayContaining([
+                    {
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        article_id: 1,
+                    }
+                ]))
+                
+
         });
     })
     test("/api/articles/:article_id/comments should return array of comments in date descending order", () => {
@@ -120,7 +126,17 @@ describe("API endpoints", () => {
     test("When article id doesn't exist for comments it should return an error", () => {
         return request(app)
         .get("/api/articles/100/comments")
-        .expect(400)
+        .expect(404)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = "This article doesn't exist!"
+                expect(message).toEqual(expected)
+        });
+    })
+    test("When article doesn't have any comments it should return an error", () => {
+        return request(app)
+        .get("/api/articles/2/comments")
+        .expect(404)
             .then((result) => {
                 const message = JSON.parse(result.error.text).msg;
                 const expected = 'There are no comments for this article'
