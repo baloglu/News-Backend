@@ -159,9 +159,7 @@ describe("API endpoints", () => {
         .post("/api/articles/1/comments").send(comment)
         .expect(201)
             .then((result) => {
-                console.log(result.body)
                 const comment = result.body;
-                const expected = 'created_at'
                 expect(comment).toHaveProperty("article_id", 1)
                 expect(comment).toHaveProperty("body", "Hello")
                 expect(comment).toHaveProperty("author", "lurker")
