@@ -117,4 +117,14 @@ describe("API endpoints", () => {
                 expect(comments).toBeSortedBy(expected, {descending: true})
         });
     })
+    test("When article id doesn't exist it should return an error", () => {
+        return request(app)
+        .get("/api/articles/100/comments")
+        .expect(400)
+            .then((result) => {
+                const message = JSON.parse(result.error.text).msg;
+                const expected = 'There are no comments for this article'
+                expect(message).toEqual(expected)
+        });
+    })
 })
