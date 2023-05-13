@@ -5,8 +5,8 @@ function postArticleComments(request, response, next) {
     const comment = request.body
     postArticleCommentsModel(article_id, comment.username, comment.body)
         .then(result => {
-            const inserted = result.rows[0]
-            response.status(201).send(inserted)
+            const insertedItem = result.rows[0]
+            response.status(201).send({ article: insertedItem })
         })
         .catch(err => {
             next(err)
