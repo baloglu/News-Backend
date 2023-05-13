@@ -153,4 +153,26 @@ describe("API endpoints", () => {
                 expect(message).toEqual(expected)
         });
     })
+    test("Posting to /api/articles/:article_id/comments should return the posted comment", () => {
+        const comment = { username: 'lurker', body: 'Hello'}
+        return request(app)
+        .post("/api/articles/1/comments").send(comment)
+        .expect(201)
+            .then((result) => {
+                const comment = result.body;
+                expect(comment).toHaveProperty("article_id", 1)
+                expect(comment).toHaveProperty("body", "Hello")
+                expect(comment).toHaveProperty("author", "lurker")
+        });
+    })
+    test.only("Posting comments with user not in users table should return an error", () => {
+        const comment = { username: 'chetin', body: 'Hello'}
+        return request(app)
+        .post("/api/articles/1/comments").send(comment)
+        .expect(500)
+            .then((result) => {
+                const msg = JSON.parse(result.text).msg
+                expect(msg).toBe("Database key error")
+        });
+    })
 })
