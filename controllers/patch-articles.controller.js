@@ -6,6 +6,10 @@ function patchArticle(request, response, next) {
     patchArticleModel(article_id, body)
         .then(result => {
             response.status(200).send({ article: result.rows[0] })
+        })
+        .catch(err => {
+            console.log('err in patch', err)
+            next(err)
     })
 }
 

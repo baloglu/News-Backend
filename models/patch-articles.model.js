@@ -8,6 +8,13 @@ function patchArticleModel(article_id, body) {
     return db.query(
         query
     )
+        .then(result => {
+            if (result.rows.length === 0) {
+                return Promise.reject({ status: 400, msg: "Article doesn't exist" })
+            }
+            return result
+        }
+    )
 }
 
 module.exports = { patchArticleModel }

@@ -186,4 +186,16 @@ describe("API endpoints", () => {
                 expect(article).toHaveProperty("votes", 10)
         });
     })
+    test("When article id doesn't exist patching should return an error", () => {
+        const inc_votes = { inc_votes: 10 }
+        return request(app)
+        .patch("/api/articles/100").send(inc_votes)
+        .expect(400)
+            .then((result) => {
+                console.log(result.body)
+                const message = JSON.parse(result.error.text).msg;
+                const expected = "Article doesn't exist"
+                expect(message).toEqual(expected)
+        });
+    })
 })
