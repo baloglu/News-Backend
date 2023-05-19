@@ -159,13 +159,13 @@ describe("API endpoints", () => {
         .post("/api/articles/1/comments").send(comment)
         .expect(201)
             .then((result) => {
-                const comment = result.body;
-                expect(comment).toHaveProperty("article_id", 1)
-                expect(comment).toHaveProperty("body", "Hello")
-                expect(comment).toHaveProperty("author", "lurker")
+                const { article }  = result.body;
+                expect(article).toHaveProperty("article_id", 1)
+                expect(article).toHaveProperty("body", "Hello")
+                expect(article).toHaveProperty("author", "lurker")
         });
     })
-    test.only("Posting comments with user not in users table should return an error", () => {
+    test("Posting comments with user not in users table should return an error", () => {
         const comment = { username: 'chetin', body: 'Hello'}
         return request(app)
         .post("/api/articles/1/comments").send(comment)
@@ -173,6 +173,29 @@ describe("API endpoints", () => {
             .then((result) => {
                 const msg = JSON.parse(result.text).msg
                 expect(msg).toBe("Database key error")
+        });
+    })
+    test("Patching /api/articles/:article_id should return the patched article", () => {
+        const inc_votes = { inc_votes: 10 }
+        return request(app)
+        .patch("/api/articles/1").send(inc_votes)
+        .expect(200)
+            .then((result) => {
+                const { article } = result.body;
+                expect(article).toHaveProperty("article_id", 1)
+                expect(article).toHaveProperty("votes", 10)
+        });
+    })
+    test("When article id doesn't exist patching should return an error", () => {
+        const inc_votes = { inc_votes: 10 }
+        return request(app)
+        .patch("/api/articles/100").send(inc_votes)
+        .expect(400)
+            .then((result) => {
+                console.log(result.body)
+                const message = JSON.parse(result.error.text).msg;
+                const expected = "Article doesn't exist"
+                expect(message).toEqual(expected)
         });
     })
 })
